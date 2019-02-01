@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            mListView = (ListView) rootView.findViewById(R.id.list);
+            mListView = (ListView) rootView.findViewById(android.R.id.list);
             return rootView;
         }
 
@@ -157,11 +157,11 @@ public class MainActivity extends AppCompatActivity {
             private JSONArray mItems;
             private ImageLoader mImageLoader;
 
-            public MyAdapter() {
+            MyAdapter() {
                 this(new JSONArray());
             }
 
-            public MyAdapter(JSONArray items) {
+            MyAdapter(JSONArray items) {
                 mItems = items;
                 mImageLoader = new ImageLoader();
             }
@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
                 return root;
             }
 
-            public void setItems(JSONArray items) {
+            void setItems(JSONArray items) {
                 mItems = items;
             }
         }
