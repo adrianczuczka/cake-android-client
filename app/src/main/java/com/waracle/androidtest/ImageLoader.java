@@ -24,25 +24,17 @@ public class ImageLoader {
     /**
      * Simple function for loading a bitmap image from the web
      *
-     * @param url       image url
+     * @param data       image url
      * @param imageView view to set image too.
      */
-    public void load(String url, ImageView imageView) {
-        if (TextUtils.isEmpty(url)) {
-            throw new InvalidParameterException("URL is empty!");
-        }
+    public void load(byte[] data, ImageView imageView) {
 
         // Can you think of a way to improve loading of bitmaps
         // that have already been loaded previously??
-
-        try {
-            setImageView(imageView, convertToBitmap(loadImageData(url)));
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
-        }
+        setImageView(imageView, convertToBitmap(data));
     }
 
-    private static byte[] loadImageData(String url) throws IOException {
+    public static byte[] loadImageData(String url) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         InputStream inputStream = null;
         try {
