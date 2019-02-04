@@ -30,9 +30,21 @@ public class PlaceholderFragment extends ListFragment {
 
     private ListView mListView;
     private MyAdapter mAdapter;
-    private MainActivityModel model;
+    private List<Cake> cakes;
 
-    public PlaceholderFragment() { /**/ }
+    public static PlaceholderFragment getInstance(ArrayList<Cake> cakes){
+        PlaceholderFragment fragment = new PlaceholderFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("cakes", cakes);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        cakes = getArguments().getParcelableArrayList("cakes");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,19 +59,8 @@ public class PlaceholderFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
 
         // Create and set the list adapter.
-        mAdapter = new MyAdapter();
+        mAdapter = new MyAdapter(cakes);
         mListView.setAdapter(mAdapter);
-        // Load data from net.
-        if (getActivity() != null) {
-            model = ViewModelProviders.of(getActivity()).get(MainActivityModel.class);
-            model.getCakes().observe(this, new Observer<List<Cake>>() {
-                @Override
-                public void onChanged(@Nullable List<Cake> cakes) {
-                    mAdapter.setItems(cakes);
-                    mAdapter.notifyDataSetChanged();
-                }
-            });
-        }
     }
 
     private class MyAdapter extends BaseAdapter {

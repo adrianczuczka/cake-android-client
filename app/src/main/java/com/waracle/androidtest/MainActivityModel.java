@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -17,25 +18,45 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 //Switch to MVVM architecture for cleaner modularity and easier testing
 public class MainActivityModel extends AndroidViewModel {
     private static final String JSON_URL = "https://gist.githubusercontent.com/hart88/198f29ec5114a3ec3460/" +
             "raw/8dd19a88f9b8d24c23d9960f3300d0c917a4f07c/cake.json";
     private final CakeLiveData cakes;
+    private final MutableLiveData<Integer> progress = new MutableLiveData<>();
+    private int progressValue = 0;
 
     public MainActivityModel(Application application) {
         super(application);
         cakes = new CakeLiveData();
+        progress.postValue(progressValue);
     }
 
-    LiveData<List<Cake>> getCakes() {
+    CakeLiveData getCakes() {
         return cakes;
     }
 
-    public class CakeLiveData extends LiveData<List<Cake>>{
+    MutableLiveData<Integer> getProgress() {
+        return progress;
+    }
+
+    void refreshCakes() {
+        cakes.refresh();
+    }
+
+    private void addProgress(int progressToAdd){
+        //safer as progress.getValue() might return null
+        progressValue += progressToAdd;
+        progress.postValue(progressValue + progressToAdd);
+    }
+
+    public class CakeLiveData extends LiveData<ArrayList<Cake>>{
         CakeLiveData() {
+            refresh();
+        }
+
+        void refresh(){
             new DownloadCakeDataTask().execute();
         }
 
@@ -46,10 +67,10 @@ public class MainActivityModel extends AndroidViewModel {
 
           Still, if I could use third party libraries, I would use Retrofit for network operations.*/
         @SuppressLint("StaticFieldLeak")
-        private class DownloadCakeDataTask extends AsyncTask<Void, Void, List<Cake>> {
+        private class DownloadCakeDataTask extends AsyncTask<Void, Void, ArrayList<Cake>> {
 
             @Override
-            protected List<Cake> doInBackground(Void... voids) {
+            protected ArrayList<Cake> doInBackground(Void... voids) {
                 try {
                     JSONArray array = loadData();
                     ArrayList<Cake> tempList = new ArrayList<>();
@@ -64,6 +85,7 @@ public class MainActivityModel extends AndroidViewModel {
                             Log.e(getClass().getSimpleName(), "Error loading image data");
                         }
                         tempList.add(cake);
+                        addProgress(100 / array.length());
                     }
                     return tempList;
                 } catch (IOException | JSONException e) {
@@ -73,7 +95,7 @@ public class MainActivityModel extends AndroidViewModel {
             }
 
             @Override
-            protected void onPostExecute(List<Cake> list) {
+            protected void onPostExecute(ArrayList<Cake> list) {
                 cakes.postValue(list);
             }
         }

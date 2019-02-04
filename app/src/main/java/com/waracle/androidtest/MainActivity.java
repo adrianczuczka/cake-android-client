@@ -1,21 +1,42 @@
 package com.waracle.androidtest;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+    MainActivityModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        model = ViewModelProviders.of(this).get(MainActivityModel.class);
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
+            loadCakes();
         }
+    }
+
+    public void loadCakes() {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, LoadingFragment.getInstance())
+                .commit();
+        model.getCakes().observe(this, new Observer<ArrayList<Cake>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<Cake> cakes) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, PlaceholderFragment.getInstance(cakes))
+                        .commit();
+            }
+        });
     }
 
     @Override
