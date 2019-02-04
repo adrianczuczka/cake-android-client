@@ -17,6 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/cake_grey_54x54"
         android:contentDescription="@string/cake_list_item_image_content_description"/>
 
     <TextView

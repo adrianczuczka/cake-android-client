@@ -14,8 +14,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +26,6 @@ import java.util.List;
  */
 public class PlaceholderFragment extends ListFragment {
 
-    private static final String JSON_URL = "https://gist.githubusercontent.com/hart88/198f29ec5114a3ec3460/" +
-            "raw/8dd19a88f9b8d24c23d9960f3300d0c917a4f07c/cake.json";
     private static final String TAG = PlaceholderFragment.class.getSimpleName();
 
     private ListView mListView;
@@ -108,7 +104,9 @@ public class PlaceholderFragment extends ListFragment {
                 Cake cake = cakes.get(position);
                 title.setText(cake.getTitle());
                 desc.setText(cake.getDescription());
-                mImageLoader.load(cake.getImageData(), image);
+                if (cake.getImageData() != null) {
+                    mImageLoader.load(cake.getImageData(), image);
+                }
             }
 
             return root;

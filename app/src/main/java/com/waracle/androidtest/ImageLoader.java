@@ -2,15 +2,12 @@ package com.waracle.androidtest;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.text.TextUtils;
-import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.InvalidParameterException;
 
 /**
  * Created by Riad on 20/05/2015.
@@ -35,27 +32,54 @@ public class ImageLoader {
     }
 
     public static byte[] loadImageData(String url) throws IOException {
+        return loadImageDataWithRedirect(url, 0);
+    }
+
+    //This helper method exists to avoid getting stuck in a redirect loop, even though that is unlikely it
+    // should still be handled.
+    private static byte[] loadImageDataWithRedirect(String url, int redirectAmount) throws IOException{
+        if(redirectAmount >= 3){
+            return null;
+        }
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-        InputStream inputStream = null;
-        try {
+        int responseCode = connection.getResponseCode();
+        String contentType = connection.getHeaderField("Content-Type");
+        if(contentType == null || !contentType.startsWith("image/")){
+            return null;
+        }
+        if(responseCode == 200){
+            InputStream inputStream = null;
             try {
-                // Read data from workstation
-                inputStream = connection.getInputStream();
-            } catch (IOException e) {
-                // Read the error from the workstation
-                inputStream = connection.getErrorStream();
+                try {
+                    // Read data from workstation
+                    inputStream = connection.getInputStream();
+                } catch (IOException e) {
+                    // Read the error from the workstation
+                    inputStream = connection.getErrorStream();
+                }
+
+                // Can you think of a way to make the entire
+                // HTTP more efficient using HTTP headers??
+                return StreamUtils.readUnknownFully(inputStream);
+            } finally {
+                // Close the input stream if it exists.
+                StreamUtils.close(inputStream);
+
+                // Disconnect the connection
+                connection.disconnect();
             }
-
-            // Can you think of a way to make the entire
-            // HTTP more efficient using HTTP headers??
-
-            return StreamUtils.readUnknownFully(inputStream);
-        } finally {
-            // Close the input stream if it exists.
-            StreamUtils.close(inputStream);
-
-            // Disconnect the connection
-            connection.disconnect();
+        }
+        else if(responseCode >= 300 && responseCode <= 308){
+            String location = connection.getHeaderField("Location");
+            if(location != null){
+                return loadImageDataWithRedirect(location, redirectAmount + 1);
+            }
+            else{
+                return null;
+            }
+        }
+        else{
+            return null;
         }
     }
 
