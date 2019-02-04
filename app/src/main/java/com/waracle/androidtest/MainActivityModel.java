@@ -23,14 +23,18 @@ import java.util.ArrayList;
 public class MainActivityModel extends AndroidViewModel {
     private static final String JSON_URL = "https://gist.githubusercontent.com/hart88/198f29ec5114a3ec3460/" +
             "raw/8dd19a88f9b8d24c23d9960f3300d0c917a4f07c/cake.json";
-    private final CakeLiveData cakes;
+    private final CakeLiveData cakes = new CakeLiveData();
     private final MutableLiveData<Integer> progress = new MutableLiveData<>();
     private int progressValue = 0;
 
     public MainActivityModel(Application application) {
         super(application);
-        cakes = new CakeLiveData();
-        progress.postValue(progressValue);
+    }
+
+    void refresh(){
+        progressValue = 0;
+        progress.setValue(progressValue);
+        cakes.refresh();
     }
 
     CakeLiveData getCakes() {
@@ -41,10 +45,6 @@ public class MainActivityModel extends AndroidViewModel {
         return progress;
     }
 
-    void refreshCakes() {
-        cakes.refresh();
-    }
-
     private void addProgress(int progressToAdd){
         //safer as progress.getValue() might return null
         progressValue += progressToAdd;
@@ -52,9 +52,6 @@ public class MainActivityModel extends AndroidViewModel {
     }
 
     public class CakeLiveData extends LiveData<ArrayList<Cake>>{
-        CakeLiveData() {
-            refresh();
-        }
 
         void refresh(){
             new DownloadCakeDataTask().execute();
@@ -96,7 +93,7 @@ public class MainActivityModel extends AndroidViewModel {
 
             @Override
             protected void onPostExecute(ArrayList<Cake> list) {
-                cakes.postValue(list);
+                cakes.setValue(list);
             }
         }
     }

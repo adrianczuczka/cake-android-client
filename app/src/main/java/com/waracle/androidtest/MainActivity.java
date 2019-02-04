@@ -1,7 +1,6 @@
 package com.waracle.androidtest;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     MainActivityModel model;
@@ -26,9 +24,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadCakes() {
+
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, LoadingFragment.getInstance())
+                .replace(R.id.container, LoadingFragment.getInstance())
                 .commit();
+        model.refresh();
         model.getCakes().observe(this, new Observer<ArrayList<Cake>>() {
             @Override
             public void onChanged(@Nullable ArrayList<Cake> cakes) {
@@ -37,6 +37,14 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
             }
         });
+    }
+
+    public void refreshCakes(){
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, LoadingFragment.getInstance())
+                .commit();
+        model.refresh();
+
     }
 
     @Override
@@ -55,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
+            refreshCakes();
             return true;
         }
 
