@@ -18,6 +18,7 @@ public class LoadingFragment extends Fragment {
     private ProgressBar indeterminateBar;
     private ProgressBar determinateBar;
 
+    //Android good practice even with no arguments.
     public static LoadingFragment getInstance() {
         return new LoadingFragment();
     }

@@ -17,16 +17,17 @@ import java.net.URL;
 public class ImageLoader {
 
     /*
-    Keep two LRUCaches: One for improving performance of converting byte arrays to bitmaps, and the other
-    to avoid re-downloading a byte array from a URL if the URL has been visited recently.
+    Keep an LRUCache for loading bitmaps from byte arrays.
+
+    The reason this works is because even though the ImageLoader is used in different fragments (for loading byte arrays
+    and for loading bitmaps), it is always the same instance due to being a part of the ViewModel.
+    ViewModel life cycles transcend those of fragments so all fragments will be using the same ImageLoader instance.
      */
     private final LruCache<byte[], Bitmap> bitmapCache;
-    private final LruCache<String, byte[]> byteArrayCache;
 
     public ImageLoader() {
         int cacheSize = 4 * 1024 * 1024;
         bitmapCache = new LruCache<>(cacheSize);
-        byteArrayCache = new LruCache<>(cacheSize);
     }
 
     /**
@@ -52,16 +53,7 @@ public class ImageLoader {
     }
 
     public byte[] loadImageData(String url) throws IOException {
-        byte[] bytes;
-        if(url != null && byteArrayCache.get(url) != null){
-            bytes = byteArrayCache.get(url);
-        }
-        else{
-            bytes = loadImageDataWithRedirect(url, 0);
-            if(bytes != null){
-                byteArrayCache.put(url, bytes);
-            }
-        }
+        byte[] bytes = loadImageDataWithRedirect(url, 0);
         if(bytes != null && bitmapCache.get(bytes) == null){
             bitmapCache.put(bytes, convertToBitmap(bytes));
         }
@@ -75,6 +67,8 @@ public class ImageLoader {
             return null;
         }
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.addRequestProperty("Cache-Control", "max-age=" + (60 * 60 * 24 * 7));
+        connection.setUseCaches(true);
         int responseCode = connection.getResponseCode();
         String contentType = connection.getHeaderField("Content-Type");
         if(contentType != null && !contentType.startsWith("image/")){
@@ -93,6 +87,9 @@ public class ImageLoader {
 
                 // Can you think of a way to make the entire
                 // HTTP more efficient using HTTP headers??
+
+                // Use an HTTPResponseCache.
+
                 return StreamUtils.readUnknownFully(inputStream);
             } finally {
                 // Close the input stream if it exists.

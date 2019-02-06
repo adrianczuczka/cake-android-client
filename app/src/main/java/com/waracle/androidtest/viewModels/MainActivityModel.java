@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 //Switch to MVVM architecture for cleaner modularity and easier testing
+
 /*If I had access to third-party testing frameworks, I would make this class more reusable by allowing
 * it to take a URL as a parameter rather than defining as a static String. This way, the ViewModel could
 * be tested with a mock URL.*/

@@ -21,13 +21,6 @@ import java.util.List;
 import com.waracle.androidtest.R;
 import com.waracle.androidtest.viewModels.MainActivityModel;
 
-/**
- * Fragment is responsible for loading in some JSON and
- * then displaying a list of cakes with images.
- * Fix any crashes
- * Improve any performance issues
- * Use good coding practices to make code more secure
- */
 public class CakeListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
