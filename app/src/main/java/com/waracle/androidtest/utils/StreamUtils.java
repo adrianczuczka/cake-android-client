@@ -1,4 +1,4 @@
-package com.waracle.androidtest;
+package com.waracle.androidtest.utils;
 
 import android.util.Log;
 
@@ -6,7 +6,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 /**
  * Created by Riad on 20/05/2015.

@@ -8,6 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.waracle.androidtest.fragments.CakeListFragment;
+import com.waracle.androidtest.fragments.LoadingFragment;
+import com.waracle.androidtest.pojos.Cake;
+import com.waracle.androidtest.viewModels.MainActivityModel;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.waracle.androidtest;
+package com.waracle.androidtest.fragments;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+
+import com.waracle.androidtest.viewModels.MainActivityModel;
+import com.waracle.androidtest.R;
 
 public class LoadingFragment extends Fragment {
     ProgressBar indeterminateBar;

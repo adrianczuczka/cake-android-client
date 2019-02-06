@@ -1,4 +1,4 @@
-package com.waracle.androidtest;
+package com.waracle.androidtest.viewModels;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -7,6 +7,10 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.waracle.androidtest.pojos.Cake;
+import com.waracle.androidtest.utils.ImageLoader;
+import com.waracle.androidtest.utils.StreamUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,17 +35,17 @@ public class MainActivityModel extends AndroidViewModel {
         super(application);
     }
 
-    void refresh(){
+    public void refresh(){
         progressValue = 0;
         progress.setValue(progressValue);
         cakes.refresh();
     }
 
-    CakeLiveData getCakes() {
+    public CakeLiveData getCakes() {
         return cakes;
     }
 
-    MutableLiveData<Integer> getProgress() {
+    public MutableLiveData<Integer> getProgress() {
         return progress;
     }
 

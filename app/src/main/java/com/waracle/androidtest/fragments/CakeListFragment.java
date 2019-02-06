@@ -1,4 +1,4 @@
-package com.waracle.androidtest;
+package com.waracle.androidtest.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -11,6 +11,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.waracle.androidtest.pojos.Cake;
+import com.waracle.androidtest.utils.ImageLoader;
+import com.waracle.androidtest.R;
 
 import java.util.ArrayList;
 import java.util.List;

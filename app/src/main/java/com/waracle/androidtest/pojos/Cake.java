@@ -1,4 +1,4 @@
-package com.waracle.androidtest;
+package com.waracle.androidtest.pojos;
 
 import android.os.Parcel;
 import android.os.Parcelable;
