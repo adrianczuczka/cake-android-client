@@ -31,18 +31,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         model = ViewModelProviders.of(this).get(MainActivityModel.class);
-        /*
-        Install HTTPResponseCache for later use.
-         */
-        try {
-            File httpCacheDir = new File(getApplicationContext().getCacheDir(), "http");
-            long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
-            HttpResponseCache.install(httpCacheDir, httpCacheSize);
-        } catch (IOException e) {
-            Log.e(TAG, "HTTP response cache installation failed:" + e);
-        }
+        observeCakes();
         if (savedInstanceState == null) {
             loadCakes();
+            //Install HTTPResponseCache for later use.
+            try {
+                File httpCacheDir = new File(getApplicationContext().getCacheDir(), "http");
+                long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
+                HttpResponseCache.install(httpCacheDir, httpCacheSize);
+            } catch (IOException e) {
+                Log.e(TAG, "HTTP response cache installation failed:" + e);
+            }
         }
     }
 
@@ -51,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.container, LoadingFragment.getInstance())
                 .commit();
         model.refresh();
+    }
+
+    private void observeCakes() {
         model.getCakes().observe(this, new Observer<ArrayList<Cake>>() {
             @Override
             public void onChanged(@Nullable ArrayList<Cake> cakes) {
@@ -59,14 +61,6 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
             }
         });
-    }
-
-    private void refreshCakes(){
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, LoadingFragment.getInstance())
-                .commit();
-        model.refresh();
-
     }
 
     @Override
@@ -85,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
-            refreshCakes();
+            loadCakes();
             return true;
         }
 

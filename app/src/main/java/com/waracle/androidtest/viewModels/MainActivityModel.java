@@ -123,6 +123,8 @@ public class MainActivityModel extends AndroidViewModel {
             // Can you think of a way to improve the performance of loading data
             // using HTTP headers???
 
+            //Use the cache-control property to check if the response has been cached already.
+
             // Also, Do you trust any utils thrown your way????
 
             byte[] bytes = StreamUtils.readUnknownFully(in);
