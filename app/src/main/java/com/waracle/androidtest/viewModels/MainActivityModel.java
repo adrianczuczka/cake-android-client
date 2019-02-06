@@ -7,6 +7,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.waracle.androidtest.pojos.Cake;
 import com.waracle.androidtest.utils.ImageLoader;
@@ -32,10 +33,12 @@ public class MainActivityModel extends AndroidViewModel {
             "raw/8dd19a88f9b8d24c23d9960f3300d0c917a4f07c/cake.json";
     private final CakeLiveData cakes = new CakeLiveData();
     private final MutableLiveData<Integer> progress = new MutableLiveData<>();
+    private ImageLoader mImageLoader;
     private int progressValue = 0;
 
     public MainActivityModel(Application application) {
         super(application);
+        mImageLoader = new ImageLoader();
     }
 
     public void refresh(){
@@ -56,6 +59,10 @@ public class MainActivityModel extends AndroidViewModel {
         //safer as progress.getValue() might return null
         progressValue += progressToAdd;
         progress.postValue(progressValue + progressToAdd);
+    }
+
+    public ImageLoader getImageLoader() {
+        return mImageLoader;
     }
 
     public class CakeLiveData extends LiveData<ArrayList<Cake>>{
@@ -84,7 +91,7 @@ public class MainActivityModel extends AndroidViewModel {
                         cake.setTitle(obj.getString("title"));
                         cake.setDescription(obj.getString("desc"));
                         try {
-                            cake.setImageData(ImageLoader.loadImageData(obj.getString("image")));
+                            cake.setImageData(mImageLoader.loadImageData(obj.getString("image")));
                         } catch (IOException e) {
                             Log.e(getClass().getSimpleName(), "Error loading image data");
                         }

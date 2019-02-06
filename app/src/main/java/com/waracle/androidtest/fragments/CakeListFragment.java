@@ -1,5 +1,6 @@
 package com.waracle.androidtest.fragments;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import com.waracle.androidtest.utils.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
 import com.waracle.androidtest.R;
+import com.waracle.androidtest.viewModels.MainActivityModel;
 
 /**
  * Fragment is responsible for loading in some JSON and
@@ -30,6 +32,7 @@ public class CakeListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private List<Cake> cakes = new ArrayList<>();
+    private ImageLoader mImageLoader;
 
     public static CakeListFragment getInstance(ArrayList<Cake> cakes){
         CakeListFragment fragment = new CakeListFragment();
@@ -59,19 +62,21 @@ public class CakeListFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        CakeListAdapter mAdapter = new CakeListAdapter(cakes);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+        if(getActivity() != null) {
+            MainActivityModel model = ViewModelProviders.of(getActivity()).get(MainActivityModel.class);
+            mImageLoader = model.getImageLoader();
+            CakeListAdapter mAdapter = new CakeListAdapter(cakes);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mRecyclerView.setAdapter(mAdapter);
+        }
     }
 
-    private static class CakeListAdapter extends RecyclerView.Adapter<CakeListAdapter.CakeViewHolder> {
+    private class CakeListAdapter extends RecyclerView.Adapter<CakeListAdapter.CakeViewHolder> {
 
         private final List<Cake> cakes;
-        private final ImageLoader mImageLoader;
 
-        private static class CakeViewHolder extends RecyclerView.ViewHolder{
+        private class CakeViewHolder extends RecyclerView.ViewHolder{
             private final TextView title;
             private final TextView description;
             private final ImageView image;
@@ -90,7 +95,6 @@ public class CakeListFragment extends Fragment {
 
         private CakeListAdapter(List<Cake> items) {
             cakes = items;
-            mImageLoader = new ImageLoader();
         }
 
         @NonNull
