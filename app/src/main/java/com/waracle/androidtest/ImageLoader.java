@@ -44,7 +44,7 @@ public class ImageLoader {
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         int responseCode = connection.getResponseCode();
         String contentType = connection.getHeaderField("Content-Type");
-        if(contentType == null || !contentType.startsWith("image/")){
+        if(contentType != null && !contentType.startsWith("image/")){
             return null;
         }
         if(responseCode == 200){

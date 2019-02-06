@@ -1,8 +1,6 @@
 package com.waracle.androidtest;
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
@@ -24,16 +22,16 @@ import java.util.List;
  * Improve any performance issues
  * Use good coding practices to make code more secure
  */
-public class PlaceholderFragment extends ListFragment {
+public class CakeListFragment extends ListFragment {
 
-    private static final String TAG = PlaceholderFragment.class.getSimpleName();
+    private static final String TAG = CakeListFragment.class.getSimpleName();
 
     private ListView mListView;
     private MyAdapter mAdapter;
     private List<Cake> cakes;
 
-    public static PlaceholderFragment getInstance(ArrayList<Cake> cakes){
-        PlaceholderFragment fragment = new PlaceholderFragment();
+    public static CakeListFragment getInstance(ArrayList<Cake> cakes){
+        CakeListFragment fragment = new CakeListFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("cakes", cakes);
         fragment.setArguments(bundle);

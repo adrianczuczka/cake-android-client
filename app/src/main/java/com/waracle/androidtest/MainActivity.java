@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable ArrayList<Cake> cakes) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, PlaceholderFragment.getInstance(cakes))
+                        .replace(R.id.container, CakeListFragment.getInstance(cakes))
                         .commit();
             }
         });
