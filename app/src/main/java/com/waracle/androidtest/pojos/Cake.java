@@ -8,7 +8,6 @@ public class Cake implements Parcelable {
     private String title;
     private String description;
     private byte[] imageData;
-    private View view;
 
     public Cake() {
     }
@@ -57,14 +56,6 @@ public class Cake implements Parcelable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public View getView() {
-        return view;
-    }
-
-    public void setView(View view) {
-        this.view = view;
     }
 
     public byte[] getImageData() {
