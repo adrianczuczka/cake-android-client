@@ -2,7 +2,6 @@ package com.waracle.androidtest.pojos;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.view.View;
 
 public class Cake implements Parcelable {
     private String title;

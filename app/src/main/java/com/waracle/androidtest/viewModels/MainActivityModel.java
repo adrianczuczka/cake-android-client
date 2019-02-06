@@ -24,6 +24,9 @@ import java.net.URL;
 import java.util.ArrayList;
 
 //Switch to MVVM architecture for cleaner modularity and easier testing
+/*If I had access to third-party testing frameworks, I would make this class more reusable by allowing
+* it to take a URL as a parameter rather than defining as a static String. This way, the ViewModel could
+* be tested with a mock URL.*/
 public class MainActivityModel extends AndroidViewModel {
     private static final String JSON_URL = "https://gist.githubusercontent.com/hart88/198f29ec5114a3ec3460/" +
             "raw/8dd19a88f9b8d24c23d9960f3300d0c917a4f07c/cake.json";
@@ -102,6 +105,7 @@ public class MainActivityModel extends AndroidViewModel {
         }
     }
 
+    //If I could use third-party libraries, I would use GSON for loading JSON files.
     private static JSONArray loadData() throws IOException, JSONException {
         URL url = new URL(JSON_URL);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -132,7 +136,7 @@ public class MainActivityModel extends AndroidViewModel {
      * Returns the charset specified in the Content-Type of this header,
      * or the HTTP default (ISO-8859-1) if none can be found.
      */
-    public static String parseCharset(String contentType) {
+    private static String parseCharset(String contentType) {
         if (contentType != null) {
             String[] params = contentType.split(",");
             for (int i = 1; i < params.length; i++) {

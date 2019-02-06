@@ -16,7 +16,7 @@ import com.waracle.androidtest.viewModels.MainActivityModel;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    MainActivityModel model;
+    private MainActivityModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void loadCakes() {
+    private void loadCakes() {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, LoadingFragment.getInstance())
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void refreshCakes(){
+    private void refreshCakes(){
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, LoadingFragment.getInstance())
                 .commit();

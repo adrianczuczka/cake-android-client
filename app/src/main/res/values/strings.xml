@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">AndroidTest</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_refresh">Refresh</string>
     <string name="cake_list_item_image_content_description">An image of the cake</string>
 </resources>

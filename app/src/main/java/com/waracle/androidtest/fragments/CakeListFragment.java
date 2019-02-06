@@ -3,7 +3,7 @@ package com.waracle.androidtest.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,12 +26,10 @@ import com.waracle.androidtest.R;
  * Improve any performance issues
  * Use good coding practices to make code more secure
  */
-public class CakeListFragment extends ListFragment {
-
-    private static final String TAG = CakeListFragment.class.getSimpleName();
+public class CakeListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private List<Cake> cakes;
+    private List<Cake> cakes = new ArrayList<>();
 
     public static CakeListFragment getInstance(ArrayList<Cake> cakes){
         CakeListFragment fragment = new CakeListFragment();
@@ -44,15 +42,17 @@ public class CakeListFragment extends ListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cakes = getArguments().getParcelableArrayList("cakes");
+        if(getArguments() != null){
+            cakes = getArguments().getParcelableArrayList("cakes");
+        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         //Starting from API 26, there is no need to cast findViewById.
-        mRecyclerView = rootView.findViewById(android.R.id.list);
+        mRecyclerView = rootView.findViewById(R.id.cake_list_recycler_view);
         return rootView;
     }
 
@@ -60,7 +60,6 @@ public class CakeListFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // Create and set the list adapter.
         CakeListAdapter mAdapter = new CakeListAdapter(cakes);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -69,16 +68,15 @@ public class CakeListFragment extends ListFragment {
 
     private static class CakeListAdapter extends RecyclerView.Adapter<CakeListAdapter.CakeViewHolder> {
 
-        // Can you think of a better way to represent these items???
-        private List<Cake> cakes;
-        private ImageLoader mImageLoader;
+        private final List<Cake> cakes;
+        private final ImageLoader mImageLoader;
 
-        public static class CakeViewHolder extends RecyclerView.ViewHolder{
-            public TextView title;
-            public TextView description;
-            public ImageView image;
+        private static class CakeViewHolder extends RecyclerView.ViewHolder{
+            private final TextView title;
+            private final TextView description;
+            private final ImageView image;
 
-            public CakeViewHolder(View view){
+            private CakeViewHolder(View view){
                 super(view);
                 this.title = view.findViewById(R.id.cake_list_item_title);
                 this.description = view.findViewById(R.id.cake_list_item_description);
@@ -86,11 +84,11 @@ public class CakeListFragment extends ListFragment {
             }
         }
 
-        public CakeListAdapter() {
+        private CakeListAdapter() {
             this(new ArrayList<Cake>());
         }
 
-        public CakeListAdapter(List<Cake> items) {
+        private CakeListAdapter(List<Cake> items) {
             cakes = items;
             mImageLoader = new ImageLoader();
         }

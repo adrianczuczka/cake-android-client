@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cake_list_item_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="70dp">
@@ -17,7 +16,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/cake_grey_54x54"
+        android:src="@drawable/cake_default_image"
         android:contentDescription="@string/cake_list_item_image_content_description"/>
 
     <TextView

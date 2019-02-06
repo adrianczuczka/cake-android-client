@@ -15,8 +15,8 @@ import com.waracle.androidtest.viewModels.MainActivityModel;
 import com.waracle.androidtest.R;
 
 public class LoadingFragment extends Fragment {
-    ProgressBar indeterminateBar;
-    ProgressBar determinateBar;
+    private ProgressBar indeterminateBar;
+    private ProgressBar determinateBar;
 
     public static LoadingFragment getInstance() {
         return new LoadingFragment();

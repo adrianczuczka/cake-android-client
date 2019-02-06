@@ -14,8 +14,6 @@ import java.net.URL;
  */
 public class ImageLoader {
 
-    private static final String TAG = ImageLoader.class.getSimpleName();
-
     public ImageLoader() { /**/ }
 
     /**
